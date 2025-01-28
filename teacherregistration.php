@@ -9,6 +9,43 @@
 </head>
 <body>
     <section class="form-container">
+    <?php
+
+    include('php/config.php');
+    if(isset($_POST['submit'])){
+        $firstname = $_POST['firstname'];
+        $lastname = $_POST['lastname'];
+        $department = $_POST['department'];
+        $phoneno = $_POST['phoneno'];
+        $email = $_POST['email'];
+        $residence = $_POST['residence'];
+        $gender = $_POST['gender'];
+        $dob = $_POST['dob'];
+        $tid = $_POST['tid'];
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $c_pass = $_POST['c_pass'];
+
+       //verifying the unique email
+        $verify_query = mysqli_query($con,"SELECT Email FROM teacher WHERE Email='$email'");
+
+    if(mysqli_num_rows($verify_query) !=0 ){
+        echo "<div class='message'>
+             <p>This email is used, Try another One Please!</p>
+         </div> <br>";
+        echo "<a href='javascript:self.history.back()'><button class='btn'>Go Back</button>";
+   }
+   else{
+       mysqli_query($con,"INSERT INTO teacher(FirstName,LastName,Department,PhoneNo,Email,Gender,DateOfBirth,Residence,TeacherID,Username,Password,ConfirmPassword) VALUES('$firstname','$lastname','$department','$phoneno','$email','$gender','$dob','$residence','$tid','$username','$password','$c_pass')") or die("Error Occured");
+
+       echo "<div class='message'>
+             <p>Registration successfully!</p>
+         </div> <br>";
+       echo "<a href='index.php'><button class='btn'>Login Now</button>";
+
+   }
+    }else{
+    ?>
         <form action="" method="post" enctype="multipart/form-data">
            <h3>Enter the required information</h3>
            <p>First Name <span>*</span></p>
@@ -35,8 +72,9 @@
            <input type="password" name="password" placeholder="Use your Teacher ID" required maxlength="20" class="box">
            <p>Confirm Password <span>*</span></p>
            <input type="password" name="c_pass" required maxlength="20" class="box">
-           <input type="submit" value="register new" name="submit" class="btn">
+           <button type="submit" class="btn" name="submit">Register</button>
         </form>
   </section>
+  <?php } ?>
 </body>
 </html>
